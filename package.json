@@ -1,0 +1,36 @@
+{
+  "name": "@blinkmobile/blink-camera",
+  "version": "0.0.1",
+  "description": "Javascript plugin that uses WebRTC if available or cordova-camera if availalbe",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "web",
+    "rtc",
+    "camera",
+    "cordova",
+    "blink",
+    "blinkmobile"
+  ],
+  "devDependencies": {
+    "babel-plugin-transform-es2015-modules-umd": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "del": "^2.2.2",
+    "eslint": "^3.2.2",
+    "eslint-config-standard": "^5.3.5",
+    "eslint-plugin-promise": "^2.0.1",
+    "eslint-plugin-standard": "^2.0.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^2.0.0"
+  },
+  "author": "Blink Mobile",
+  "license": "ISC",
+  "dependencies": {
+    "getusermedia": "^2.0.0"
+  }
+}
