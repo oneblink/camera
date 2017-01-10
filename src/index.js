@@ -1,5 +1,5 @@
 'use strict'
 
-import Camera from './camera.js'
+import cameraFactory from './camera-factory.js'
 
-window.bmCamera = Camera
+window.bmCameraFactory = cameraFactory

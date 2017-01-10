@@ -2,3 +2,7 @@ node_modules/
 dist/
 
 .eslintcache
+
+example/cert.pem
+example/key.pem
+server.bat
