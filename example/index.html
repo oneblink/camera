@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+  <head>
+    <!-- inject:js -->
+    <script src="../dist/bm-camera.js"></script>
+    <!-- endinject -->
+  </head>
+  <body>
+    <div class="bm-webrtc__bm-imagecontainer" style="width:100%;overflow:hidden">
+      <video autoplay
+             width="100%"
+             style="transition: transform 0.25s ease-out"
+             class="bm-webrtc__bm-video"></video>
+      <img class="bm-webrtc__bm-videostill"
+           style="display: none;"
+           width="100%"/>
+    </div>
+    <button id="init">Open Camera</button>
+    <button id="cancel">Close Camera</button>
+    <select id="device"></select>
+
+    <script>
+    var videoEl = document.getElementsByClassName('bm-webrtc__bm-video')[0]
+    var imgEl = document.getElementsByClassName('bm-webrtc__bm-videostill')[0]
+
+    var camera = new window.bmCamera()
+    var initEl = document.getElementById('init')
+
+    // initialise the camera handler
+    initEl.addEventListener('click', function (e) {
+      camera.init().then(function (stream) {
+        videoEl.srcObject = stream
+      })
+      e.preventDefault()
+    })
+
+    // hook up cancel handler
+    var c = document.getElementById('cancel')
+    c.addEventListener('click', function (e) {
+      camera.stopVideo()
+      videoEl.srcObject = null
+    })
+
+    var d = document.getElementById('device')
+    window.bmCamera.getDevices().then(function (devices) {
+      devices.forEach(function (device, idx) {
+        d.appendChild(new Option(device.label, idx))
+      })
+    })
+
+    d.addEventListener('change', function (e) {
+      camera.useDevice(camera.availableDevices[d.value])
+    })
+
+    </script>
+  </body>
+</html>
