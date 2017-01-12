@@ -2,24 +2,39 @@
 
 import getUserMedia from 'getusermedia'
 
-const isEnabled = (window.URL &&
-                   window.URL.createObjectURL &&
-                   (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia) ||
-                    !!navigator.mediaDevices)
-
-const defaultConstraints = {video: true, audio: false}
+const privateVars = new WeakMap()
 
 // constructor
-function WebRTCCamera () {
-  this.stream = null
-  this.videoTrack = null
+function WebRTCCamera (videoEl) {
+  this.defaultConstraints = {video: true, audio: false}
+
+  privateVars.set(this, {
+    videoEl: videoEl,
+    stream: null,
+    videoTrack: null
+  })
 }
 
 // static properties
 WebRTCCamera.availableDevices = null
 
-// static functions
-WebRTCCamera.getDevices = function () {
+// instance methods
+WebRTCCamera.prototype.useDevice = function (device) {
+  this.stopVideo()
+
+  if (!('deviceId' in device)) {
+    throw new TypeError('Invalid device selected, must be of type MediaDeviceInfo')
+  }
+
+  this.defaultConstraints = {
+    audio: false,
+    video: {
+      deviceId: { exact: device.deviceId }
+    }
+  }
+}
+
+WebRTCCamera.prototype.getDevices = function () {
   if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
     return Promise.reject(new Error('Media Devices API not supported in this browser'))
   }
@@ -28,20 +43,12 @@ WebRTCCamera.getDevices = function () {
     WebRTCCamera.availableDevices = devices.filter((d) => d.kind.toLowerCase() === 'videoinput')
 
     return WebRTCCamera.availableDevices
-    // eslint-disable-next-line no-console
-  }).catch((err) => console.error(err.name + ': ' + err.message))
+  })
 }
 
-// instance methods
-WebRTCCamera.prototype.init = function (constraints = defaultConstraints) {
-  if (!isEnabled) {
-    return Promise.reject(new Error('WebRTC camera is not available'))
-  }
+WebRTCCamera.prototype.open = function (constraints = this.defaultConstraints) {
+  constraints = Object.assign({}, WebRTCCamera.defaultConstraints, constraints)
 
-  return this.getStream(constraints)
-}
-
-WebRTCCamera.prototype.getStream = function (constraints = defaultConstraints) {
   return new Promise((resolve, reject) => {
     getUserMedia(constraints, (err, stream) => {
       if (err) {
@@ -49,39 +56,36 @@ WebRTCCamera.prototype.getStream = function (constraints = defaultConstraints) {
       }
 
       const videoTracks = stream.getVideoTracks()
+      const vars = privateVars.get(this)
       if (!videoTracks.length) {
-        this.stream = null
-        this.videoTrack = null
+        vars.stream = null
+        vars.videoTrack = null
 
         return reject(new Error('Could not get a video track from stream'))
       }
 
-      this.videoTrack = videoTracks[0]
-      this.stream = stream
+      vars.videoEl.addEventListener('canplay', resolve, {once: true})
 
-      resolve(this.stream)
+      vars.videoTrack = videoTracks[0]
+      vars.stream = stream
+      vars.videoEl.srcObject = stream
     })
   })
 }
 
-WebRTCCamera.prototype.useDevice = function (device) {
-  this.stopVideo()
+WebRTCCamera.prototype.getPicture = function () {
+  const canvas = document.createElement('canvas')
+  const ctx = canvas.getContext('2d')
+  const videoEl = privateVars.get(this).videoEl
+  canvas.width = videoEl.videoWidth
+  canvas.height = videoEl.videoHeight
 
-  if (!('deviceId' in device)) {
-    throw new TypeError('Invalid device selected, must be of type MediaDeviceInfo')
-  }
-  const constraints = {
-    audio: false,
-    video: {
-      deviceId: { exact: device.deviceId }
-    }
-  }
-
-  return this.getStream(constraints)
+  ctx.drawImage(privateVars.get(this).videoEl, 0, 0)
+  return Promise.resolve(canvas.toDataURL('image/png'))
 }
 
-WebRTCCamera.prototype.stopVideo = function () {
-  this.videoTrack.stop()
+WebRTCCamera.prototype.stop = function () {
+  privateVars.get(this).videoTrack.stop()
 }
 
-export {isEnabled, WebRTCCamera, getUserMedia as source}
+export default WebRTCCamera

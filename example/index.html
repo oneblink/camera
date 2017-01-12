@@ -6,10 +6,10 @@
     <!-- endinject -->
   </head>
   <body>
+    <h1>WebRTC example</h1>
     <div class="bm-webrtc__bm-imagecontainer" style="width:100%;overflow:hidden">
       <video autoplay
              width="100%"
-             style="transition: transform 0.25s ease-out"
              class="bm-webrtc__bm-video"></video>
       <img class="bm-webrtc__bm-videostill"
            style="display: none;"
@@ -17,19 +17,31 @@
     </div>
     <button id="init">Open Camera</button>
     <button id="cancel">Close Camera</button>
+    <button id="snap" disabled>Take Picture</button>
     <select id="device"></select>
 
     <script>
     var videoEl = document.getElementsByClassName('bm-webrtc__bm-video')[0]
     var imgEl = document.getElementsByClassName('bm-webrtc__bm-videostill')[0]
-
-    var camera = new window.bmCamera()
+    var snap = document.getElementById('snap')
+    var camera = window.bmCameraFactory(videoEl)
     var initEl = document.getElementById('init')
+
+    var hideVideo = function () {
+      videoEl.style.display = 'none'
+      imgEl.style.display = 'block'
+    }
+
+    var showVideo = function () {
+      videoEl.style.display = 'block'
+      imgEl.style.display = 'none'
+    }
 
     // initialise the camera handler
     initEl.addEventListener('click', function (e) {
-      camera.init().then(function (stream) {
-        videoEl.srcObject = stream
+      camera.open().then(function (e) {
+        snap.disabled = false
+        showVideo()
       })
       e.preventDefault()
     })
@@ -37,17 +49,37 @@
     // hook up cancel handler
     var c = document.getElementById('cancel')
     c.addEventListener('click', function (e) {
-      camera.stopVideo()
+      snap.disabled = true
+      hideVideo()
+      camera.stop()
       videoEl.srcObject = null
     })
 
+    // hook up take photo handler
+    snap.addEventListener('click', function () {
+      camera.getPicture(imgEl).then(function (imgData) {
+        var onFailure = function (e) {
+          showVideo()
+        }
+        imgEl.addEventListener('load', hideVideo, {once: true})
+        imgEl.addEventListener('error', onFailure, {once: true})
+        imgEl.setAttribute('src', imgData)
+
+        return camera.stop()
+      })
+    })
+
+    // populate the device list
+    // NOTE! Firefox will only populate device.label once access has been granted by the user. This method should be called
+    // after the user has granted permission
     var d = document.getElementById('device')
-    window.bmCamera.getDevices().then(function (devices) {
+    camera.getDevices().then(function (devices) {
       devices.forEach(function (device, idx) {
         d.appendChild(new Option(device.label, idx))
       })
     })
 
+    // use the selected device
     d.addEventListener('change', function (e) {
       camera.useDevice(camera.availableDevices[d.value])
     })
