@@ -1,22 +1,16 @@
 'use strict'
 
-import CordovaCamera from './cordova/camera.js'
-import WebRTCCamera from './webrtc/camera.js'
+import cordovaFactory from './cordova/cordova-factory.js'
+import webRTCFactory from './webrtc/webrtc-factory.js'
 
 function cameraFactory (...args) {
   const useCordova = !!(window.Camera && navigator.camera)
-  let Constructor
-
-  // allows constructor to accept variable number od arguments.
-  args.unshift(null)
 
   if (useCordova) {
-    Constructor = CordovaCamera.bind.apply(CordovaCamera, args)
-  } else {
-    Constructor = WebRTCCamera.bind.apply(WebRTCCamera, args)
+    return cordovaFactory.apply(null, args)
   }
 
-  return new Constructor()
+  return webRTCFactory.apply(null, args)
 }
 
 export default cameraFactory
