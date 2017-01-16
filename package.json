@@ -1,9 +1,13 @@
 {
   "name": "@blinkmobile/blink-camera",
   "version": "0.0.1",
-  "description": "Javascript plugin that uses WebRTC if available or cordova-camera if availalbe",
-  "main": "index.js",
-  "jsnext:main": "index.js",
+  "description": "Javascript plugin that uses WebRTC if available or cordova-camera if available",
+  "homepage": "https://github.com/blinkmobile/blink-camera",
+  "main": "dist/bm-camera.js",
+  "jsnext:main": "src/index.js",
+  "files": [
+    "dist/bm-camera.js"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "eslint": "eslint --fix --cache .",
@@ -29,25 +33,21 @@
     "fixpack": "^2.3.1",
     "flow-bin": "^0.37.1",
     "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
-    "gulp-better-rollup": "^1.0.2",
-    "gulp-concat": "^2.6.1",
     "gulp-rename": "^1.2.2",
     "gulp-rollup": "^2.5.1",
-    "gulp-sourcemaps": "^1.9.1",
     "gulp-uglify": "^2.0.0",
+    "gulp-util": "^3.0.8",
     "rollup": "^0.37.2",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^6.0.0",
     "rollup-plugin-eslint": "^3.0.0",
-    "rollup-plugin-node-resolve": "^2.0.0",
-    "rollup-plugin-uglify": "^1.0.1",
-    "webrtc-adapter": "^2.1.0"
+    "rollup-plugin-inject": "^2.0.0",
+    "rollup-plugin-node-resolve": "^2.0.0"
   },
   "author": "Blink Mobile",
   "license": "ISC",
   "dependencies": {
-    "getusermedia": "^2.0.0"
+    "getusermedia": "2.0.0"
   },
   "engines": {
     "node": ">=7",
