@@ -1,8 +1,13 @@
 <!doctype html>
 <html>
   <head>
-    <!-- inject:js -->
-    <script src="../dist/bm-camera.js"></script>
+    <!-- if you built without including the getUserMedia shim, you'll need to include it here -->
+    <script src="../node_modules/getusermedia/getusermedia.bundle.js"></script>
+    <!-- bm-camera contains both webrtc and cordova plugin wrappers
+    <script src="../dist/bm-camera.js"></script> -->
+    <!-- bm-camera-webrtc.js includes only web rtc wrapper -->
+    <script src="../dist/bm-camera-webrtc.js"></script>
+    <!-- <script src="../dist/bm-camera-webrtc.min.js"></script> -->
     <!-- endinject -->
   </head>
   <body>
@@ -39,7 +44,7 @@
 
     // initialise the camera handler
     initEl.addEventListener('click', function (e) {
-      camera.open().then(function (e) {
+      camera.open().then(function () {
         snap.disabled = false
         showVideo()
       })
@@ -51,7 +56,7 @@
     c.addEventListener('click', function (e) {
       snap.disabled = true
       hideVideo()
-      camera.stop()
+      camera.close()
       videoEl.srcObject = null
     })
 
@@ -65,7 +70,7 @@
         imgEl.addEventListener('error', onFailure, {once: true})
         imgEl.setAttribute('src', imgData)
 
-        return camera.stop()
+        return camera.close()
       })
     })
 
@@ -77,6 +82,9 @@
       devices.forEach(function (device, idx) {
         d.appendChild(new Option(device.label, idx))
       })
+    }).catch(function (e) {
+      console.log('An error occured:')
+      console.log(e)
     })
 
     // use the selected device
