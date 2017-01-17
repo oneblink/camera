@@ -4,7 +4,11 @@
   "description": "Javascript plugin that uses WebRTC if available or cordova-camera if available",
   "homepage": "https://github.com/blinkmobile/blink-camera",
   "main": "dist/bm-camera.js",
-  "jsnext:main": "src/index.js",
+  "jsnext:main": "src/camera-factory.js",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/blinkmobile/blink-camera.git"
+  },
   "files": [
     "dist/",
     "src/",
