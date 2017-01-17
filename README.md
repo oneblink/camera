@@ -91,3 +91,21 @@ Cordova projects will use the image taken when [open](#open) was called. If ther
 Stops the WebRTC video feed and closes the webcam
 
 `undefined` for Cordova Projects
+
+
+## Build
+
+See [gulpfile](gulpfile.js) for the available tasks.
+
+All tasks will accept the following command line args
+
+- `--buildmode prod` - Builds both minified and unminified libraries
+- `--shim true` - Includes the getUserMedia shim in the plugin file.
+
+By default the `dist/` folder contains the lib without the getUserMedia shim.
+
+## Tests
+
+Currently only Chrome is tested, Firefox tests will be available soon.
+
+Tests are run via gulp - `gulp test-webrtc`
