@@ -1,10 +1,14 @@
 'use strict'
 
+const path = require('path')
+
 const gulp = require('gulp')
 const util = require('gulp-util')
 const uglify = require('gulp-uglify')
 const rename = require('gulp-rename')
 const del = require('del')
+
+const KarmaServer = require('karma').Server
 
 const devBanner = require('./buildfiles/banner.js').devBanner
 const prodBanner = require('./buildfiles/banner.js').prodBanner
@@ -31,6 +35,13 @@ const FILENAME_WEBRTC = 'bm-camera-webrtc.js'
 const banner = PROD_BUILD ? prodBanner(pkg) : devBanner(pkg)
 
 const makeBundle = function (entry, destFilename) {
+  // notify the developer about what is being built
+// eslint-disable-next-line
+console.log(`Creating a ${PROD_BUILD ? 'production' : 'development'} build
+${!USE_SHIM ? 'NOT ' : ''}using getUserMedia Shim
+-----------------------------
+${banner.replace(/^\/?\s?\*\/?/gm, '')}`)
+
   const plugins = [
     resolve({
       jsnext: true,
@@ -82,17 +93,23 @@ const minify = function (fileName) {
   }
 }
 
-// notify the developer about what is being built
-// eslint-disable-next-line
-console.log(`Creating a ${PROD_BUILD ? 'production' : 'development'} build
-${!USE_SHIM ? 'NOT ' : ''}using getUserMedia Shim
------------------------------
-${banner.replace(/^\/?\s?\*\/?/gm, '')}`)
-
 /* ///////////////////// gulp tasks */
 
 gulp.task('clean', () => {
   return del(DEST)
+})
+
+gulp.task('test-webrtc', (done) => {
+  new KarmaServer({
+    configFile: path.join(__dirname, './karma.conf.js'),
+    singleRun: false,
+    files: [
+      'node_modules/babel-helpers/index.js',
+      'node_modules/getusermedia/getusermedia.bundle.js',
+      'dist/bm-camera-webrtc.js',
+      'test/**/*.js'
+    ]
+  }, done).start()
 })
 
 gulp.task('both', () => {
