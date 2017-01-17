@@ -6,7 +6,9 @@
   "main": "dist/bm-camera.js",
   "jsnext:main": "src/index.js",
   "files": [
-    "dist/bm-camera.js"
+    "dist/",
+    "src/",
+    "example/"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
