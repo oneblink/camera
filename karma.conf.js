@@ -1,6 +1,5 @@
 // Karma configuration
 // Generated on Tue Jan 17 2017 10:13:20 GMT+1100 (AUS Eastern Daylight Time)
-const babel = require('rollup-plugin-babel')
 module.exports = function(config) {
   config.set({
 
@@ -10,14 +9,6 @@ module.exports = function(config) {
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['jasmine'],
-
-    // list of files / patterns to load in the browser
-    // files: [
-    //   'dist/bm-camera-cordova.js',
-    //   'dist/bm-camera-webrtc.js',
-    //   'dist/bm-camera.js',
-    //   'test/**/*.js'
-    // ],
 
     // list of files to exclude
     exclude: [
@@ -30,16 +21,6 @@ module.exports = function(config) {
       'node_modules/babel-helpers/index.js': ['babel'],
       'test/**/*.js': ['babel']
     },
-
-    // rollupPreprocessor: {
-    //   // rollup settings. See Rollup documentation
-    //   plugins: [
-    //     babel() // ES2015 compiler by the same author as Rollup
-    //   ],
-    //   // will help to prevent conflicts between different tests entries
-    //   format: 'iife',
-    //   sourceMap: 'inline'
-    // },
 
     babelPreprocessor: {
       options: {
@@ -68,7 +49,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['chrome_no_prompt'], // 'Firefox'],
+    browsers: ['chrome_no_prompt'],
     // see https://webrtc.org/testing/
     customLaunchers: {
       chrome_no_prompt: {

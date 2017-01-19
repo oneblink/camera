@@ -1,6 +1,6 @@
-# Blink Camera
+# Camera
 
- [![npm](https://img.shields.io/npm/v/@blinkmobile/blink-camera.svg?maxAge=2592000)](https://www.npmjs.com/package/@blinkmobile/blink-camera)
+ [![npm](https://img.shields.io/npm/v/@blinkmobile/camera.svg?maxAge=2592000)](https://www.npmjs.com/package/@blinkmobile/camera)
 
 A Facade over WebRTC or Cordova's Camera plugin for a consistant API
 
@@ -18,25 +18,33 @@ There are 3 builds, depending on your target:
 this file in the bundle, otherwise you must include it in your web project.
 See the Build section for more information.
 
+## Supported Browsers
+
+Any browser that is supported by the [getusermedia shim](https://www.npmjs.com/package/getusermedia) is supported. At the time of writing,Safari is unsupported.
+
 ## WebRTC example
 
-See the [examples](example/) folder for examples of how to use this library
+See the [WebRTC examples](example/webrtc) folder for examples of how to use this library. Note that WebRTC requires the page to load over https for access to the webcam. We recommend using the [http-server](https://www.npmjs.com/package/http-server) node module for this.
+
+## Cordova Example
+
+See the [Cordova Examples](example/cordova) folder for instructions on how to make the Cordova example.
 
 ## API
 
-blink-camera is a facade around [cordova-plugin-camera](https://www.npmjs.com/package/cordova-plugin-camera#module_Camera.Direction) and [WebRTC](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API) that provides an (alomst) unified API.
+@blinkmobile/camera is a facade around [cordova-plugin-camera](https://www.npmjs.com/package/cordova-plugin-camera#module_Camera.Direction) and [WebRTC](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API) that provides an (alomst) unified API.
 It is meant to be used in conjuntion with a component framework such as Angular,
 React, Vue etc.
 
-blink-camera is distributed as a UMD module. If no module system is found it is
-bound to the global `window.bmCamera`
+@blinkmobile/camera is distributed as a UMD module. If no module system is found it is
+bound to the global `window.bmCameraFactoryFactory`
 
-`window.bmCamera` or the imported module is a factory function that returns an
+`window.bmCameraFactory` or the imported module is a factory function that returns an
 instance of either `CordovaCamera` or `WebRTCCamera`, depending on the environment.
 
 ### Factory
 
-`window.bmCamera`  or if used in a module system like commonjs `require('blink-camera')` is the factory function.
+`window.bmCameraFactory`  or if used in a module system like commonjs `require('@blinkmobile/camera')` is the factory function.
 
 It returns a CordovaCamera or WebRTCCamera instance.
 
@@ -108,4 +116,4 @@ By default the `dist/` folder contains the lib without the getUserMedia shim.
 
 Currently only Chrome is tested, Firefox tests will be available soon.
 
-Tests are run via gulp - `gulp test-webrtc`
+Tests are run via gulp - `gulp test-webrtc` or npm - `npm test`
