@@ -37,7 +37,7 @@ It is meant to be used in conjuntion with a component framework such as Angular,
 React, Vue etc.
 
 @blinkmobile/camera is distributed as a UMD module. If no module system is found it is
-bound to the global `window.bmCameraFactoryFactory`
+bound to the global `window.bmCameraFactory`
 
 `window.bmCameraFactory` or the imported module is a factory function that returns an
 instance of either `CordovaCamera` or `WebRTCCamera`, depending on the environment.
