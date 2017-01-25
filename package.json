@@ -1,6 +1,6 @@
 {
   "name": "@blinkmobile/camera",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Javascript plugin that uses WebRTC if available or cordova-camera if available",
   "homepage": "https://github.com/blinkmobile/camera",
   "main": "dist/bm-camera.js",
