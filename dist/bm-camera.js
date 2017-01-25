@@ -1,5 +1,5 @@
 /*
- * @blinkmobile/camera: v0.0.1 | https://github.com/blinkmobile/camera
+ * @blinkmobile/camera: v0.0.3 | https://github.com/blinkmobile/camera
  * (c) 2017 BlinkMobile | Released under the ISC license
  */
 
@@ -83,6 +83,12 @@ function cordovaFactory() {
   return new (CordovaCamera.bind.apply(CordovaCamera, args))();
 }
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
 var privateVars$1 = new WeakMap();
 
 // constructor
@@ -105,14 +111,18 @@ function WebRTCCamera(videoEl) {
 
 // instance methods
 WebRTCCamera.prototype.useDevice = function (device) {
-  this.stopVideo();
+  this.close();
 
   if (!('deviceId' in device)) {
     throw new TypeError('Invalid device selected, must be of type MediaDeviceInfo');
   }
 
-  this.defaultConstraints.video = this.defaultConstraints.video || {};
-  this.defaultConstraints.video.deviceId = { exact: device.deviceId };
+  var newConstraints = _typeof(this.defaultConstraints.video) === 'object' ? this.defaultConstraints.video : {};
+
+  newConstraints.deviceId = { exact: device.deviceId };
+  this.defaultConstraints.video = newConstraints;
+
+  return this.open();
 };
 
 WebRTCCamera.prototype.getDevices = function () {
@@ -188,7 +198,8 @@ WebRTCCamera.prototype.getPicture = function () {
 };
 
 WebRTCCamera.prototype.close = function () {
-  privateVars$1.get(this).videoTrack.stop();
+  var track = privateVars$1.get(this).videoTrack;
+  track && track.stop();
 };
 
 function webRTCFactory() {

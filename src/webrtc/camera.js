@@ -28,8 +28,14 @@ WebRTCCamera.prototype.useDevice = function (device) {
     throw new TypeError('Invalid device selected, must be of type MediaDeviceInfo')
   }
 
-  this.defaultConstraints.video = this.defaultConstraints.video || {}
-  this.defaultConstraints.video.deviceId = {exact: device.deviceId}
+  const newConstraints = typeof this.defaultConstraints.video === 'object'
+                         ? this.defaultConstraints.video
+                         : {}
+
+  newConstraints.deviceId = {exact: device.deviceId}
+  this.defaultConstraints.video = newConstraints
+
+  return this.open()
 }
 
 WebRTCCamera.prototype.getDevices = function () {
@@ -97,7 +103,8 @@ WebRTCCamera.prototype.getPicture = function () {
 }
 
 WebRTCCamera.prototype.close = function () {
-  privateVars.get(this).videoTrack.stop()
+  const track = privateVars.get(this).videoTrack
+  track && track.stop()
 }
 
 export default WebRTCCamera

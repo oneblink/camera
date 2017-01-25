@@ -1,5 +1,5 @@
 /*
- * @blinkmobile/camera: v0.0.1 | https://github.com/blinkmobile/camera
+ * @blinkmobile/camera: v0.0.3 | https://github.com/blinkmobile/camera
  * (c) 2017 BlinkMobile | Released under the ISC license
  */
 
