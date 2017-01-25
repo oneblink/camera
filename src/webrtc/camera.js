@@ -22,7 +22,7 @@ function WebRTCCamera (videoEl) {
 
 // instance methods
 WebRTCCamera.prototype.useDevice = function (device) {
-  this.stopVideo()
+  this.close()
 
   if (!('deviceId' in device)) {
     throw new TypeError('Invalid device selected, must be of type MediaDeviceInfo')
