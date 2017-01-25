@@ -64,7 +64,9 @@ CordovaCamera.prototype.getPicture = function () {
 
   if (!privates.result) {
     return this.open(constraints).then(function () {
-      return privates.result;
+      var result = privates.result;
+      privates.result = null;
+      return result;
     });
   }
 

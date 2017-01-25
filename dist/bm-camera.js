@@ -64,7 +64,9 @@ CordovaCamera.prototype.getPicture = function () {
 
   if (!privates.result) {
     return this.open(constraints).then(function () {
-      return privates.result;
+      var result = privates.result;
+      privates.result = null;
+      return result;
     });
   }
 
@@ -181,9 +183,8 @@ WebRTCCamera.prototype.getPicture = function () {
   canvas.width = videoEl.videoWidth;
   canvas.height = videoEl.videoHeight;
   ctx.drawImage(vars.videoEl, 0, 0);
-  vars.result = canvas.toDataURL('image/png');
 
-  return Promise.resolve(vars.result);
+  return Promise.resolve(canvas.toDataURL('image/png'));
 };
 
 WebRTCCamera.prototype.close = function () {

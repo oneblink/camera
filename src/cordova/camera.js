@@ -49,7 +49,11 @@ CordovaCamera.prototype.getPicture = function (constraints = this.defaultConstra
   const privates = privateVars.get(this)
 
   if (!privates.result) {
-    return this.open(constraints).then(() => privates.result)
+    return this.open(constraints).then(() => {
+      const result = privates.result
+      privates.result = null
+      return result
+    })
   }
 
   return Promise.resolve(privates.result)
