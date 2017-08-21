@@ -1,5 +1,7 @@
 # Camera
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/blinkmobile/camera.svg)](https://greenkeeper.io/)
+
  [![npm](https://img.shields.io/npm/v/@blinkmobile/camera.svg?maxAge=2592000)](https://www.npmjs.com/package/@blinkmobile/camera)
 
 A Facade over WebRTC or Cordova's Camera plugin for a consistant API
